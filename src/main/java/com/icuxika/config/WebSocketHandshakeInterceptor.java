@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
 
+    public static final String ATTRIBUTE_API_HEADER = "API_HEADER";
+
     public static Map<String, Integer> HANDSHAKE_MAP = new ConcurrentHashMap<>();
 
     @Override
@@ -27,7 +29,7 @@ public class WebSocketHandshakeInterceptor implements HandshakeInterceptor {
             }
         }
 
-        attributes.put("apiHeader", apiHeader);
+        attributes.put(ATTRIBUTE_API_HEADER, apiHeader);
 
         // 握手之前
         return true;

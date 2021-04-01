@@ -25,10 +25,10 @@ public class WebSocketSessionManager {
      * @param userId           用户ID
      * @param webSocketSession 会话数据
      */
-    public static void openSession(long userId, WebSocketSession webSocketSession) {
+    public static void openSession(WebSocketSession webSocketSession, long userId, int clientType) {
         // 判断当前是否记录了该用户的会话数据
         List<ManageableWebSocketSession> userSessionList = USER_SESSION_LIST_MAP.computeIfAbsent(userId, k -> new ArrayList<>());
-        ManageableWebSocketSession manageableWebSocketSession = new ManageableWebSocketSession(webSocketSession, userId);
+        ManageableWebSocketSession manageableWebSocketSession = new ManageableWebSocketSession(webSocketSession, userId, clientType);
         SESSION_ID_MAP.put(webSocketSession.getId(), manageableWebSocketSession);
         userSessionList.add(manageableWebSocketSession);
 
@@ -63,6 +63,16 @@ public class WebSocketSessionManager {
         List<ManageableWebSocketSession> result = new ArrayList<>();
         USER_SESSION_LIST_MAP.values().forEach(result::addAll);
         return result;
+    }
+
+    /**
+     * 根据会话信息获取响应会话
+     *
+     * @param session 会话
+     * @return 会话数据
+     */
+    public static ManageableWebSocketSession getManageableWebSocketSessionBySession(WebSocketSession session) {
+        return SESSION_ID_MAP.get(session.getId());
     }
 
     /**

@@ -11,17 +11,26 @@ import java.io.IOException;
  */
 public class ManageableWebSocketSession {
 
-    private WebSocketSession webSocketSession;
+    private final WebSocketSession webSocketSession;
 
-    private Long userId;
+    /**
+     * 用户ID
+     */
+    private final Long userId;
+
+    /**
+     * 设备类型
+     */
+    private final Integer clientType;
 
     private long pingCount = 0L;
 
     private long pongCount = 0;
 
-    public ManageableWebSocketSession(WebSocketSession webSocketSession, Long userId) {
+    public ManageableWebSocketSession(WebSocketSession webSocketSession, Long userId, Integer clientType) {
         this.webSocketSession = webSocketSession;
         this.userId = userId;
+        this.clientType = clientType;
     }
 
     /**
@@ -58,7 +67,7 @@ public class ManageableWebSocketSession {
      * @return 是否
      */
     public boolean offline() {
-        return pingCount - pongCount <= 3;
+        return pingCount - pongCount > 3;
     }
 
     public WebSocketSession getWebSocketSession() {
@@ -67,5 +76,9 @@ public class ManageableWebSocketSession {
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Integer getClientType() {
+        return clientType;
     }
 }
