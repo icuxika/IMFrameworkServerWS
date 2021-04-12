@@ -49,6 +49,7 @@ public class WebSocketSessionManager {
             ManageableWebSocketSession manageableWebSocketSession = SESSION_ID_MAP.get(webSocketSession.getId());
             if (manageableWebSocketSession != null) {
                 userSessionList.remove(manageableWebSocketSession);
+                SESSION_ID_MAP.remove(webSocketSession.getId());
                 System.out.println(userId + "下线了");
             }
         }

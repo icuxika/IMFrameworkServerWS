@@ -67,7 +67,7 @@ public class ManageableWebSocketSession {
      * @return 是否
      */
     public boolean offline() {
-        return pingCount - pongCount > 3;
+        return pingCount - pongCount < 3;
     }
 
     public WebSocketSession getWebSocketSession() {
