@@ -67,6 +67,7 @@ public class ManageableWebSocketSession {
      * @return 是否
      */
     public boolean offline() {
+        System.out.println("[" + userId + "]" + "ping: " + pingCount + ", pong: " + pongCount);
         return pingCount - pongCount < 3;
     }
 
