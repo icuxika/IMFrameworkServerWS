@@ -1,5 +1,7 @@
 package com.icuxika.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -12,20 +14,22 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class SessionDeathDetectionRunner implements ApplicationRunner {
 
+    private static final Logger logger = LoggerFactory.getLogger(SessionDeathDetectionRunner.class);
+
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
 
     @Override
     public void run(ApplicationArguments args) {
-        System.out.println("开始会话死亡定时检测任务");
+        logger.info("开始会话死亡定时检测任务");
         scheduler.scheduleWithFixedDelay(() -> {
             List<ManageableWebSocketSession> userSessionList = WebSocketSessionManager.getCurrentWebSocketSessionList();
             if (userSessionList.isEmpty()) {
-                System.out.println("没有用户在线");
+                logger.warn("没有用户在线");
             } else {
                 userSessionList.forEach(manageableWebSocketSession -> {
                     if (!manageableWebSocketSession.sendPing()) {
                         WebSocketSessionManager.closeSession(manageableWebSocketSession.getUserId(), manageableWebSocketSession.getWebSocketSession());
-                        System.out.println(manageableWebSocketSession.getUserId() + "超时下线");
+                        logger.info(manageableWebSocketSession.getUserId() + "超时下线");
                     }
                 });
             }

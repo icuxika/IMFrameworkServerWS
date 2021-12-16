@@ -1,5 +1,7 @@
 package com.icuxika.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -10,6 +12,8 @@ import java.io.IOException;
  * 对一个会话进行管理，检测是否在线、网络是否依旧正常等
  */
 public class ManageableWebSocketSession {
+
+    private static final Logger logger = LoggerFactory.getLogger(ManageableWebSocketSession.class);
 
     private final WebSocketSession webSocketSession;
 
@@ -67,7 +71,7 @@ public class ManageableWebSocketSession {
      * @return 是否
      */
     public boolean offline() {
-        System.out.println("[" + userId + "]" + "ping: " + pingCount + ", pong: " + pongCount);
+        logger.info("[" + userId + "]" + "ping: " + pingCount + ", pong: " + pongCount);
         return pingCount - pongCount < 3;
     }
 

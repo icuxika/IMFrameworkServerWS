@@ -1,5 +1,7 @@
 package com.icuxika.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.socket.WebSocketSession;
 
 import java.util.ArrayList;
@@ -8,6 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class WebSocketSessionManager {
+
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketSessionManager.class);
 
     /**
      * 用户ID <-> 多个设备登录的会话信息
@@ -32,7 +36,7 @@ public class WebSocketSessionManager {
         SESSION_ID_MAP.put(webSocketSession.getId(), manageableWebSocketSession);
         userSessionList.add(manageableWebSocketSession);
 
-        System.out.println(userId + "上线了");
+        logger.info(userId + "上线了");
 
         // TODO 同类型设备登录同账号是否踢掉、向自己的某个设备发送消息
     }
@@ -50,7 +54,7 @@ public class WebSocketSessionManager {
             if (manageableWebSocketSession != null) {
                 userSessionList.remove(manageableWebSocketSession);
                 SESSION_ID_MAP.remove(webSocketSession.getId());
-                System.out.println(userId + "下线了");
+                logger.info(userId + "下线了");
             }
         }
     }
